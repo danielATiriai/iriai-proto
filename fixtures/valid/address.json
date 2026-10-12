@@ -1,0 +1,24 @@
+{
+  "description": "Sidecar with a street address; resolves only through a provider lookup.",
+  "synthetic": true,
+  "repo": "did:web:fixtures.iriai.app",
+  "record": {
+    "$type": "{ns}.event",
+    "eventUri": "at://did:web:fixtures.iriai.app/community.lexicon.calendar.event/3lzkvx7ysb22c",
+    "location": {
+      "$type": "community.lexicon.location.address",
+      "street": "1840 Sutter St",
+      "locality": "San Francisco",
+      "region": "CA",
+      "postalCode": "94115",
+      "country": "US",
+      "name": "JCCCNC"
+    }
+  },
+  "expect": "valid",
+  "resolution": {
+    "status": "unresolved",
+    "reason": "needs-provider",
+    "type": "community.lexicon.location.address"
+  }
+}

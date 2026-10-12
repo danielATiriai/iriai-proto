@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "lexicons": [
+    "community.lexicon.calendar.event",
+    "community.lexicon.calendar.rsvp",
+    "community.lexicon.location.address",
+    "community.lexicon.location.fsq",
+    "community.lexicon.location.geo",
+    "community.lexicon.location.hthree"
+  ],
+  "resolutions": {}
+}

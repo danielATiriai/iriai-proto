@@ -1,0 +1,21 @@
+{
+  "description": "Sidecar whose location is a variant this release does not know. The union is open, so it is valid, stays unresolved and round-trips unchanged.",
+  "synthetic": true,
+  "repo": "did:web:fixtures.iriai.app",
+  "record": {
+    "$type": "{ns}.event",
+    "eventUri": "at://did:web:fixtures.iriai.app/community.lexicon.calendar.event/3lzkvx7ysb22c",
+    "location": {
+      "$type": "org.example.place.ref",
+      "placeId": "example-123",
+      "note": "extension fields are preserved"
+    }
+  },
+  "expect": "valid",
+  "resolution": {
+    "status": "unresolved",
+    "reason": "unknown-variant",
+    "type": "org.example.place.ref"
+  },
+  "roundTrip": true
+}

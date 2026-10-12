@@ -1,0 +1,14 @@
+# Changelog
+
+## 0.1.0
+
+First contracts release (slice 1.1, BUILD-001).
+
+- `app.iriai.proto.event`: the PlaceProto event sidecar, key `tid`, with required `eventUri` (at-uri, Agreed 2026-10-11) and required `location`.
+- `app.iriai.proto.defs`: `eventView` and `eventVersion`.
+- One Location union (geo, address, fsq, hthree; open) generated into every record and view from `authoring/location.json`.
+- Vendored `community.lexicon.calendar.event`, `community.lexicon.calendar.rsvp`, the four `community.lexicon.location.*` variants and `com.atproto.repo.strongRef`, pinned by URI and CID.
+- Fixtures for every Location variant, an unknown variant, and the writer's rejection cases.
+- Named-place list 1.0.0 for Japantown: Peace Plaza, JCCCNC, New People Cinema, Christ United Presbyterian Church, Buddhist Church of San Francisco.
+
+Not in this release: the Post sidecar and the method lexicons (createEvent, deleteEvent, getEvent, queryEvents and the rest). They follow in a compatible 0.2.0.

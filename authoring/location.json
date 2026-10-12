@@ -1,0 +1,11 @@
+{
+  "$comment": "Single authoring source for the PlaceProto Location union (PlaceProto spec section 2). Lexicon cannot name a union, so scripts/generate.mjs inlines this exact union wherever an authoring file says {\"$location\": ...}. CI checks every generated copy is identical.",
+  "type": "union",
+  "closed": false,
+  "refs": [
+    "community.lexicon.location.geo",
+    "community.lexicon.location.address",
+    "community.lexicon.location.fsq",
+    "community.lexicon.location.hthree"
+  ]
+}

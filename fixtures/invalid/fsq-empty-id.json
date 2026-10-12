@@ -1,0 +1,14 @@
+{
+  "description": "Foursquare id must not be empty.",
+  "synthetic": true,
+  "repo": "did:web:fixtures.iriai.app",
+  "record": {
+    "$type": "{ns}.event",
+    "eventUri": "at://did:web:fixtures.iriai.app/community.lexicon.calendar.event/3lzkvx7ysb22c",
+    "location": {
+      "$type": "community.lexicon.location.fsq",
+      "fsq_place_id": "   "
+    }
+  },
+  "expect": "invalid"
+}

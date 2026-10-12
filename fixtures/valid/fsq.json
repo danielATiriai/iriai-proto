@@ -1,0 +1,19 @@
+{
+  "description": "Sidecar with a bare Foursquare place id (synthetic id); resolves only through a provider lookup.",
+  "synthetic": true,
+  "repo": "did:web:fixtures.iriai.app",
+  "record": {
+    "$type": "{ns}.event",
+    "eventUri": "at://did:web:fixtures.iriai.app/community.lexicon.calendar.event/3lzkvx7ysb22c",
+    "location": {
+      "$type": "community.lexicon.location.fsq",
+      "fsq_place_id": "synthetic-fixture-fsq-id"
+    }
+  },
+  "expect": "valid",
+  "resolution": {
+    "status": "unresolved",
+    "reason": "needs-provider",
+    "type": "community.lexicon.location.fsq"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "description": "location is required.",
+  "synthetic": true,
+  "repo": "did:web:fixtures.iriai.app",
+  "record": {
+    "$type": "{ns}.event",
+    "eventUri": "at://did:web:fixtures.iriai.app/community.lexicon.calendar.event/3lzkvx7ysb22c"
+  },
+  "expect": "invalid"
+}

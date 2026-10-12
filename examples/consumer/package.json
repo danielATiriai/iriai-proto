@@ -1,0 +1,16 @@
+{
+  "name": "iriai-proto-clean-consumer",
+  "private": true,
+  "type": "module",
+  "description": "Clean-checkout consumer check: builds the pinned lexicons with an exact @atproto/lex and validates a sidecar.",
+  "scripts": {
+    "build": "lex build --lexicons lexicons --out src/lexicons --clear --index-file && tsc -p tsconfig.json",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "@atproto/lex": "0.3.14"
+  },
+  "devDependencies": {
+    "typescript": "5.9.3"
+  }
+}

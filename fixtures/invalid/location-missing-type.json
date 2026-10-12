@@ -1,0 +1,14 @@
+{
+  "description": "A union member needs $type.",
+  "synthetic": true,
+  "repo": "did:web:fixtures.iriai.app",
+  "record": {
+    "$type": "{ns}.event",
+    "eventUri": "at://did:web:fixtures.iriai.app/community.lexicon.calendar.event/3lzkvx7ysb22c",
+    "location": {
+      "latitude": "37.785054",
+      "longitude": "-122.429827"
+    }
+  },
+  "expect": "invalid"
+}
