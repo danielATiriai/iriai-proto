@@ -1,7 +1,5 @@
 {
-  "lexicon": 1,
   "id": "com.atproto.repo.strongRef",
-  "description": "A URI with a content-hash fingerprint.",
   "defs": {
     "main": {
       "type": "object",
@@ -10,15 +8,18 @@
         "cid"
       ],
       "properties": {
-        "uri": {
-          "type": "string",
-          "format": "at-uri"
-        },
         "cid": {
           "type": "string",
           "format": "cid"
+        },
+        "uri": {
+          "type": "string",
+          "format": "at-uri"
         }
       }
     }
-  }
+  },
+  "$type": "com.atproto.lexicon.schema",
+  "lexicon": 1,
+  "description": "A URI with a content-hash fingerprint."
 }
