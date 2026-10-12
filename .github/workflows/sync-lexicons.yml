@@ -36,6 +36,12 @@ jobs:
         run: node scripts/check-lexicons.mjs --require-pins
       - name: Show what changed
         run: git status --short && git diff --stat
+      # A commit pushed with the workflow token does not start CI, so the
+      # pinned result is validated here before it is committed.
+      - name: Validate with the pinned lexicons
+        run: npm run validate
+      - name: Clean consumer with the pinned lexicons
+        run: npm run verify-consumer
       - name: Commit pins to the branch
         if: github.event_name == 'workflow_dispatch' || github.event.pull_request.head.repo.full_name == github.repository
         run: |
