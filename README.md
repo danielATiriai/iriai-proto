@@ -59,3 +59,11 @@ Then for each release:
 3. After approval it publishes our lexicons as `com.atproto.lexicon.schema` records from publisher.iriai.app, resolves them back through `_lexicon.proto.iriai.app`, writes `release-manifest.json` (commit, record URIs and CIDs, pins, tool versions, who approved) and creates the GitHub release with the checksummed bundle.
 
 The publisher app password is only in the `release` environment secret `PUBLISHER_APP_PASSWORD`.
+
+## Seed events
+
+`seeds/japantown-2026-10.json` lists the real, sourced Japantown events the steward account (events.iriai.app, D-26) publishes. Each seed becomes one `community.lexicon.calendar.event` and its `app.iriai.proto.event` sidecar, written together in one `applyWrites` batch with the record keys chosen first, so neither record exists without the other. The event's `locations` carry the place's address and a copy of the sidecar location for apps that only read the community event.
+
+One-time setup: an environment named `steward` with Daniel as required reviewer, deployments limited to `main`, and the secret `STEWARD_APP_PASSWORD` (the `iriai-seeding` app password for events.iriai.app).
+
+To publish, run the **Publish seed events** workflow from `main` with the seed ids and `dry_run` unticked, then approve the `steward` environment. A seed already in the steward's repository (same source URL and start time) is reported, not written again. `node scripts/publish-seeds.mjs --dry-run --seeds <id>` prints the records locally after `npm run build`.

@@ -24,6 +24,7 @@
     "url": "git+https://github.com/danielATiriai/iriai-proto.git"
   },
   "dependencies": {
+    "@atproto/common-web": "0.5.14",
     "@atproto/lexicon": "0.7.16",
     "@atproto/syntax": "0.7.6",
     "h3-js": "4.5.0"

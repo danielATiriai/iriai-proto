@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Seed events: `seeds/japantown-2026-10.json`, `buildSeedRecords()` and the **Publish seed events** workflow, which writes each seed's community event and sidecar from events.iriai.app in one `applyWrites` batch (BUILD-002, BUILD-006). No lexicon changes.
+
 ## 0.1.0
 
 First contracts release (slice 1.1, BUILD-001).

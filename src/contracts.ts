@@ -9,6 +9,7 @@ export const packageRoot = fileURLToPath(new URL('../../', import.meta.url))
 export interface ProtoConfig {
   namespace: string
   publisher: { handle: string; did: string; authorityRecord: string }
+  steward: { handle: string; did: string }
   communityEventCollection: string
 }
 
