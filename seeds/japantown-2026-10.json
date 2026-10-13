@@ -23,7 +23,11 @@
       "startsAt": "2026-10-15T18:30:00-07:00",
       "place": "new-people-cinema",
       "source": "https://sf.funcheap.com/2026-anime-cinema-club-perfect-blue-remastered-sfs-japantown/",
-      "sourceName": "SF Funcheap listing"
+      "sourceName": "SF Funcheap listing",
+      "published": {
+        "eventRkey": "3mxrsne4vjs24",
+        "sidecarRkey": "3mxrsne4vjt24"
+      }
     },
     {
       "id": "kendo-sf-kendo-dojo-2026-10-15",
@@ -33,7 +37,11 @@
       "endsAt": "2026-10-15T22:00:00-07:00",
       "place": "jcccnc",
       "source": "https://www.jcccnc.org/events/kendo-with-sf-kendo-dojo/",
-      "sourceName": "JCCCNC event page"
+      "sourceName": "JCCCNC event page",
+      "published": {
+        "eventRkey": "3mxrsnealp324",
+        "sidecarRkey": "3mxrsnealp424"
+      }
     },
     {
       "id": "yosakoi-intro-workshop-2026-10-16",
@@ -44,7 +52,11 @@
       "place": "jcccnc",
       "mode": "hybrid",
       "source": "https://www.jcccnc.org/events/intro-to-yosakoi-dance-2025-997-830/",
-      "sourceName": "JCCCNC event page"
+      "sourceName": "JCCCNC event page",
+      "published": {
+        "eventRkey": "3mxrsneebue24",
+        "sidecarRkey": "3mxrsneebuf24"
+      }
     },
     {
       "id": "udon-making-workshop-2026-10-17",
@@ -54,7 +66,11 @@
       "endsAt": "2026-10-17T13:00:00-07:00",
       "place": "jcccnc",
       "source": "https://www.jcccnc.org/events/udon-making-workshop-2/",
-      "sourceName": "JCCCNC event page"
+      "sourceName": "JCCCNC event page",
+      "published": {
+        "eventRkey": "3mxrsnehu4n24",
+        "sidecarRkey": "3mxrsnehv3v24"
+      }
     },
     {
       "id": "curry-cook-off-2026-10-24",
@@ -64,7 +80,11 @@
       "endsAt": "2026-10-24T18:00:00-07:00",
       "place": "christ-united-presbyterian",
       "source": "https://www.instagram.com/p/DeI3B-STZ9u/",
-      "sourceName": "JARF Instagram post"
+      "sourceName": "JARF Instagram post",
+      "published": {
+        "eventRkey": "3mxrsnelgev24",
+        "sidecarRkey": "3mxrsnelgew24"
+      }
     },
     {
       "id": "family-treasures-kimono-sale-2026-10-24",
@@ -74,7 +94,11 @@
       "endsAt": "2026-10-24T16:00:00-07:00",
       "place": "buddhist-church-of-sf",
       "source": "https://www.instagram.com/p/DeI74jBTmyt/",
-      "sourceName": "Buddhist Church of San Francisco Instagram post"
+      "sourceName": "Buddhist Church of San Francisco Instagram post",
+      "published": {
+        "eventRkey": "3mxrsnephbw24",
+        "sidecarRkey": "3mxrsnephbx24"
+      }
     },
     {
       "id": "family-treasures-kimono-sale-2026-10-25",
@@ -84,7 +108,11 @@
       "endsAt": "2026-10-25T16:00:00-07:00",
       "place": "buddhist-church-of-sf",
       "source": "https://www.instagram.com/p/DeI74jBTmyt/",
-      "sourceName": "Buddhist Church of San Francisco Instagram post"
+      "sourceName": "Buddhist Church of San Francisco Instagram post",
+      "published": {
+        "eventRkey": "3mxrsnet2jh24",
+        "sidecarRkey": "3mxrsnet2ji24"
+      }
     },
     {
       "id": "jcccnc-halloween-carnival-2026-10-30",
@@ -94,7 +122,11 @@
       "endsAt": "2026-10-30T20:00:00-07:00",
       "place": "jcccnc",
       "source": "https://www.jcccnc.org/calendar-of-events/",
-      "sourceName": "JCCCNC calendar of events"
+      "sourceName": "JCCCNC calendar of events",
+      "published": {
+        "eventRkey": "3mxrsnewmrq24",
+        "sidecarRkey": "3mxrsnewmrr24"
+      }
     }
   ]
 }
