@@ -6,6 +6,10 @@ name: Try-it example
 
 on:
   pull_request:
+    paths:
+      - examples/try-it/**
+      - scripts/verify-try-it.sh
+      - .github/workflows/try-it.yml
   push:
     branches: [main]
   schedule:
