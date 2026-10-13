@@ -9,8 +9,9 @@
 // It is never created a second time. A seed without recorded keys that is
 // already in the steward's repository (same source URL and start time) is
 // reported, not written again. An unrecorded event that shares a seed's
-// source URL but not its start time stops the run, because that is what an
-// edited but unrecorded seed looks like; record its keys first.
+// source URL but not its start time, and is not another seed in the list,
+// stops the run, because that is what an edited but unrecorded seed looks
+// like; record its keys first.
 //
 //   node scripts/publish-seeds.mjs --seeds <id,id> [--dry-run]
 //
@@ -53,6 +54,9 @@ const existingSidecars = await listAll(eventSidecarNsid)
 const results = []
 
 const recordedEventRkeys = new Set(japantownSeeds.seeds.flatMap((s) => (s.published ? [s.published.eventRkey] : [])))
+// Seeds can share a source (one listing for a two-day event); an event that is
+// exactly another seed in the list is that seed, not an edited copy of this one.
+const listedSeedKeys = new Set(japantownSeeds.seeds.map((s) => `${s.source} ${new Date(s.startsAt).toISOString()}`))
 
 for (const seed of seeds) {
   if (seed.published) {
@@ -70,7 +74,9 @@ for (const seed of seeds) {
     results.push({ seed: seed.id, status: 'existing', event: pick(found), sidecar: sidecar ? pick(sidecar) : null })
     continue
   }
-  const unrecorded = sameSource.filter((r) => !recordedEventRkeys.has(rkeyOf(r.uri)))
+  const unrecorded = sameSource.filter(
+    (r) => !recordedEventRkeys.has(rkeyOf(r.uri)) && !listedSeedKeys.has(`${seed.source} ${r.value.startsAt}`),
+  )
   if (unrecorded.length) {
     fail(
       `${seed.id}: the steward already has an event from this source at another time (${unrecorded.map((r) => r.uri).join(', ')}). ` +

@@ -113,8 +113,16 @@ describe('seed events', () => {
     assert.equal(buildSeedRecords(inPerson, { repo, createdAt }).event.mode, 'community.lexicon.calendar.event#inperson')
   })
 
-  it('lists the eight approved Japantown seeds, Oct 15 to 30', () => {
-    assert.equal(japantownSeeds.seeds.length, 8)
+  it('lists the approved Japantown seeds, Oct 15 to 30, with the two-day kimono sale as one event a day', () => {
+    assert.equal(japantownSeeds.seeds.length, 9)
+    const kimono = japantownSeeds.seeds.filter((s) => s.id.startsWith('family-treasures-kimono-sale-'))
+    assert.deepEqual(
+      kimono.map((s) => [s.startsAt, s.endsAt]),
+      [
+        ['2026-10-24T11:00:00-07:00', '2026-10-24T16:00:00-07:00'],
+        ['2026-10-25T11:00:00-07:00', '2026-10-25T16:00:00-07:00'],
+      ],
+    )
     for (const seed of japantownSeeds.seeds) {
       const start = new Date(seed.startsAt)
       assert.ok(start >= new Date('2026-10-15T00:00:00-07:00') && start < new Date('2026-10-31T00:00:00-07:00'), seed.id)

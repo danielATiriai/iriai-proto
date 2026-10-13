@@ -68,9 +68,19 @@
     },
     {
       "id": "family-treasures-kimono-sale-2026-10-24",
-      "name": "Family Treasures Marketplace, Kimono Sale and BWA Boutique",
-      "description": "Family treasures marketplace, kimono sale and Buddhist Women's Association boutique in the BCSF Gymnasium at the Buddhist Church of San Francisco. Open 11am to 4pm on Saturday Oct 24 and Sunday Oct 25.",
+      "name": "Family Treasures Marketplace, Kimono Sale and BWA Boutique (Saturday)",
+      "description": "Family treasures marketplace, kimono sale and Buddhist Women's Association boutique in the BCSF Gymnasium at the Buddhist Church of San Francisco, day 1 of 2. Also open Sunday Oct 25, 11am to 4pm.",
       "startsAt": "2026-10-24T11:00:00-07:00",
+      "endsAt": "2026-10-24T16:00:00-07:00",
+      "place": "buddhist-church-of-sf",
+      "source": "https://www.instagram.com/p/DeI74jBTmyt/",
+      "sourceName": "Buddhist Church of San Francisco Instagram post"
+    },
+    {
+      "id": "family-treasures-kimono-sale-2026-10-25",
+      "name": "Family Treasures Marketplace, Kimono Sale and BWA Boutique (Sunday)",
+      "description": "Family treasures marketplace, kimono sale and Buddhist Women's Association boutique in the BCSF Gymnasium at the Buddhist Church of San Francisco, day 2 of 2. Also open Saturday Oct 24, 11am to 4pm.",
+      "startsAt": "2026-10-25T11:00:00-07:00",
       "endsAt": "2026-10-25T16:00:00-07:00",
       "place": "buddhist-church-of-sf",
       "source": "https://www.instagram.com/p/DeI74jBTmyt/",
