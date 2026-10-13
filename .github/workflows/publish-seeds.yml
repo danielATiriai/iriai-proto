@@ -1,0 +1,83 @@
+name: Publish seed events
+
+# Writes approved seed events from the steward account (events.iriai.app):
+# one community.lexicon.calendar.event plus its app.iriai.proto.event sidecar
+# per seed, committed together in one applyWrites batch. Runs only from main.
+# The check job builds and validates the records with no credentials; the
+# publish job waits for approval of the protected "steward" environment, which
+# alone holds the steward app password. A seed already published is reported,
+# not written again.
+
+on:
+  workflow_dispatch:
+    inputs:
+      seeds:
+        description: Seed ids from seeds/japantown-2026-10.json, comma-separated
+        required: true
+      dry_run:
+        description: Only build and validate the records
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Build and validate the seed records
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: node --test "dist/test/**/*.test.js"
+      - name: Dry run
+        env:
+          SEEDS: ${{ inputs.seeds }}
+        run: node scripts/publish-seeds.mjs --dry-run --seeds "$SEEDS"
+
+  publish:
+    name: Publish from events.iriai.app
+    needs: check
+    if: ${{ !inputs.dry_run && github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-latest
+    environment: steward
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      # Before anything is written: a steward environment without a required
+      # reviewer has no approvals, and the run stops here.
+      - name: Check the steward environment was approved
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          approvers=$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/approvals" \
+            --jq '[.[] | select(.state == "approved") | .user.login]')
+          if [ "$approvers" = "[]" ]; then
+            echo "::error::No approval recorded for the steward environment; add a required reviewer to \"steward\"."
+            exit 1
+          fi
+          echo "Approved by $approvers"
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - name: Publish seed events
+        env:
+          SEEDS: ${{ inputs.seeds }}
+          STEWARD_APP_PASSWORD: ${{ secrets.STEWARD_APP_PASSWORD }}
+        run: node scripts/publish-seeds.mjs --seeds "$SEEDS"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: seeds-publication
+          path: release/seeds-publication.json
+          if-no-files-found: ignore

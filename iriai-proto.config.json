@@ -6,5 +6,9 @@
     "did": "did:plc:s4il46nsgas66jl7tyh6zrec",
     "authorityRecord": "_lexicon.proto.iriai.app"
   },
+  "steward": {
+    "handle": "events.iriai.app",
+    "did": "did:plc:kd5s7zyp7nje43ievnqhgzrr"
+  },
   "communityEventCollection": "community.lexicon.calendar.event"
 }

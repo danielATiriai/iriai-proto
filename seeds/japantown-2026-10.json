@@ -1,0 +1,16 @@
+{
+  "description": "Japantown seed events published by the steward account (events.iriai.app, D-26). Each seed is a real, sourced event approved by Daniel on 2026-10-12 (BUILD-006); times are local San Francisco time with their UTC offset. Records reference the named-place list for their location.",
+  "approved": "Daniel, 2026-10-12",
+  "seeds": [
+    {
+      "id": "kabuki-appreciation-2026-10-15",
+      "name": "Kabuki Theatre Appreciation Class with JETAANC",
+      "description": "Monthly kabuki theatre appreciation class with JETAANC at the Japanese Cultural and Community Center of Northern California, held on the third Thursday of the month. Free, donations welcome.",
+      "startsAt": "2026-10-15T18:30:00-07:00",
+      "endsAt": "2026-10-15T20:30:00-07:00",
+      "place": "jcccnc",
+      "source": "https://www.jcccnc.org/events/kabuki-theatre-appreciation-class-with-jetaanc/",
+      "sourceName": "JCCCNC event page"
+    }
+  ]
+}
