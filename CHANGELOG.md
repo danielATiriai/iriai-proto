@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- `examples/try-it`: the twenty-line pinned example (slice 3.2, BUILD-008). It downloads the v0.1.0 bundle, checks its SHA-256, builds the lexicons with an exact `@atproto/lex` and queries `https://query.iriai.app` near Peace Plaza, validating every result. The **Try-it example** workflow runs it from a clean copy daily and on every change. No lexicon changes.
 - Seed events: `seeds/japantown-2026-10.json`, `buildSeedRecords()` and the **Publish seed events** workflow, which writes each seed's community event and sidecar from events.iriai.app in one `applyWrites` batch (BUILD-002, BUILD-006). No lexicon changes.
 - Seed corrections update in place: a seed with recorded record keys (`published`) is rebuilt with the same keys and `createdAt` and updated in one `swapCommit` batch, never created again. Seeds may set an attendance `mode`. The other seven approved Japantown seeds (Oct 15 to 30) are in the list, with the two-day kimono sale as one event per day (BUILD-006).
 - All nine Japantown seeds are published from events.iriai.app (run 2026-10-13) and their record keys are recorded in the seed list, so any later edit to one of them is a correction in place.
