@@ -1,0 +1,19 @@
+{
+  "description": "Sidecar with an H3 cell (resolution 9, Peace Plaza).",
+  "synthetic": true,
+  "repo": "did:web:fixtures.iriai.app",
+  "record": {
+    "$type": "{ns}.event",
+    "eventUri": "at://did:web:fixtures.iriai.app/community.lexicon.calendar.event/3lzkvx7ysb22c",
+    "location": {
+      "$type": "community.lexicon.location.hthree",
+      "value": "8928308295bffff"
+    }
+  },
+  "expect": "valid",
+  "resolution": {
+    "status": "resolved",
+    "via": "hthree",
+    "h3Resolution": 9
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "description": "eventUri is required.",
+  "synthetic": true,
+  "repo": "did:web:fixtures.iriai.app",
+  "record": {
+    "$type": "{ns}.event",
+    "location": {
+      "$type": "community.lexicon.location.geo",
+      "latitude": "37.785054",
+      "longitude": "-122.429827",
+      "name": "Japantown Peace Plaza"
+    }
+  },
+  "expect": "invalid",
+  "expectIssue": "must have the property \"eventUri\""
+}

@@ -1,0 +1,15 @@
+{
+  "description": "H3 value must be a valid cell.",
+  "synthetic": true,
+  "repo": "did:web:fixtures.iriai.app",
+  "record": {
+    "$type": "{ns}.event",
+    "eventUri": "at://did:web:fixtures.iriai.app/community.lexicon.calendar.event/3lzkvx7ysb22c",
+    "location": {
+      "$type": "community.lexicon.location.hthree",
+      "value": "not-a-cell"
+    }
+  },
+  "expect": "invalid",
+  "expectIssue": "valid H3 cell"
+}

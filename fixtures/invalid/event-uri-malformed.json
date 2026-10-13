@@ -1,0 +1,17 @@
+{
+  "description": "eventUri must be an AT-URI.",
+  "synthetic": true,
+  "repo": "did:web:fixtures.iriai.app",
+  "record": {
+    "$type": "{ns}.event",
+    "eventUri": "not-an-at-uri",
+    "location": {
+      "$type": "community.lexicon.location.geo",
+      "latitude": "37.785054",
+      "longitude": "-122.429827",
+      "name": "Japantown Peace Plaza"
+    }
+  },
+  "expect": "invalid",
+  "expectIssue": "eventUri must be a valid at-uri"
+}

@@ -1,0 +1,17 @@
+{
+  "description": "eventUri must name one record.",
+  "synthetic": true,
+  "repo": "did:web:fixtures.iriai.app",
+  "record": {
+    "$type": "{ns}.event",
+    "eventUri": "at://did:web:fixtures.iriai.app/community.lexicon.calendar.event",
+    "location": {
+      "$type": "community.lexicon.location.geo",
+      "latitude": "37.785054",
+      "longitude": "-122.429827",
+      "name": "Japantown Peace Plaza"
+    }
+  },
+  "expect": "invalid",
+  "expectIssue": "valid record key"
+}

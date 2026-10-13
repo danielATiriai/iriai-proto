@@ -1,0 +1,90 @@
+name: Release
+
+# Runs on a version tag (v0.1.0). Checks run first; publishing waits for
+# approval of the protected "release" environment, which alone holds the
+# publisher app password. A failed step stops the release by name; nothing
+# falls back to a floating latest version.
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Check the tagged commit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Generated lexicons match authoring
+        run: node scripts/generate.mjs --check
+      - name: Lexicons evolve compatibly from the previous release
+        run: node scripts/check-evolution.mjs
+      - name: Every vendored lexicon pinned and matching
+        run: node scripts/check-lexicons.mjs --require-pins
+      - name: Vendored lexicons still match the network
+        run: |
+          npx lex install --update
+          git diff --exit-code -- lexicons lexicons.json
+      - run: npm run build
+      - run: node --test "dist/test/**/*.test.js"
+      - run: npm run verify-consumer
+      - name: Bundle (refuses unverified places or a tag/version mismatch)
+        run: npm run release:bundle
+
+  publish:
+    name: Publish schemas and release
+    needs: check
+    runs-on: ubuntu-latest
+    environment: release
+    permissions:
+      contents: write
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      # Before anything is published: a release environment without a
+      # required reviewer has no approvals, and the release stops here.
+      - name: Read who approved the release environment
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          approvers=$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/approvals" \
+            --jq '[.[] | select(.state == "approved") | .user.login]')
+          if [ "$approvers" = "[]" ]; then
+            echo "::error::No approval recorded for the release environment; add a required reviewer to \"release\"."
+            exit 1
+          fi
+          echo "RELEASE_APPROVED_BY=$approvers" >> "$GITHUB_ENV"
+      - name: Bundle
+        run: npm run release:bundle
+      - name: Publish schema records from publisher.iriai.app
+        env:
+          PUBLISHER_APP_PASSWORD: ${{ secrets.PUBLISHER_APP_PASSWORD }}
+        run: npm run release:publish
+      - name: Verify publication through DNS authority and write the release manifest
+        run: npm run release:verify
+      - name: Create the GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          awk -v v="## $version" '$0==v{f=1;next} /^## /{f=0} f' CHANGELOG.md > release/notes.md
+          gh release create "$GITHUB_REF_NAME" \
+            release/iriai-proto-*.tar.gz release/SHA256SUMS \
+            release/release-manifest.json release/publication.json \
+            --title "$GITHUB_REF_NAME" --notes-file release/notes.md

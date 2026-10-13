@@ -1,0 +1,17 @@
+{
+  "description": "Latitude above 90.",
+  "synthetic": true,
+  "repo": "did:web:fixtures.iriai.app",
+  "record": {
+    "$type": "{ns}.event",
+    "eventUri": "at://did:web:fixtures.iriai.app/community.lexicon.calendar.event/3lzkvx7ysb22c",
+    "location": {
+      "$type": "community.lexicon.location.geo",
+      "latitude": "91.5",
+      "longitude": "-122.429827",
+      "name": "Japantown Peace Plaza"
+    }
+  },
+  "expect": "invalid",
+  "expectIssue": "location.latitude must be a decimal string between -90 and 90"
+}

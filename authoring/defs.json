@@ -1,0 +1,61 @@
+{
+  "lexicon": 1,
+  "id": "{ns}.defs",
+  "description": "Shared PlaceProto definitions: the complete event view and its version metadata.",
+  "defs": {
+    "eventView": {
+      "type": "object",
+      "description": "A complete PlaceProto event: the sidecar's URI, the community event it references, that event's current record value and the sidecar's location.",
+      "required": [
+        "uri",
+        "eventUri",
+        "event",
+        "location"
+      ],
+      "properties": {
+        "uri": {
+          "type": "string",
+          "format": "at-uri",
+          "description": "AT-URI of the PlaceProto event sidecar."
+        },
+        "eventUri": {
+          "type": "string",
+          "format": "at-uri",
+          "description": "AT-URI of the community event the sidecar references."
+        },
+        "event": {
+          "type": "unknown",
+          "description": "The complete current community.lexicon.calendar.event record value, including its $type."
+        },
+        "location": {
+          "$location": "The sidecar's location."
+        },
+        "version": {
+          "type": "ref",
+          "ref": "#eventVersion",
+          "description": "Record versions, present when the view is read for editing."
+        }
+      }
+    },
+    "eventVersion": {
+      "type": "object",
+      "description": "Versions of the two records that make up a PlaceProto event.",
+      "required": [
+        "eventCid",
+        "sidecarCid"
+      ],
+      "properties": {
+        "eventCid": {
+          "type": "string",
+          "format": "cid",
+          "description": "CID of the community event record."
+        },
+        "sidecarCid": {
+          "type": "string",
+          "format": "cid",
+          "description": "CID of the PlaceProto event sidecar record."
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "name": "@iriai/proto",
+  "version": "0.1.0",
+  "private": true,
+  "description": "IriaiProto record contracts: the PlaceProto event sidecar, the shared Location definition, fixtures and the named-place list.",
+  "type": "module",
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "generate": "node scripts/generate.mjs",
+    "build": "lex build --lexicons lexicons --out src/lexicons --clear --index-file && tsc -p tsconfig.json",
+    "validate": "node scripts/generate.mjs --check && node scripts/check-evolution.mjs && node scripts/check-lexicons.mjs && npm run build && node --test \"dist/test/**/*.test.js\"",
+    "verify-consumer": "bash scripts/verify-consumer.sh",
+    "sync-lexicons": "lex install --update",
+    "release:bundle": "node scripts/bundle.mjs",
+    "release:publish": "node scripts/publish.mjs",
+    "release:verify": "node scripts/verify-publication.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danielATiriai/iriai-proto.git"
+  },
+  "dependencies": {
+    "@atproto/lexicon": "0.7.16",
+    "@atproto/syntax": "0.7.6",
+    "h3-js": "4.5.0"
+  },
+  "devDependencies": {
+    "@atproto/lex": "0.3.14",
+    "@atproto/lex-cbor": "0.1.7",
+    "@atproto/lex-data": "0.1.8",
+    "@atproto/lex-document": "0.1.13",
+    "@atproto/lex-resolver": "0.3.2",
+    "@types/node": "22.20.5",
+    "typescript": "5.9.3"
+  }
+}

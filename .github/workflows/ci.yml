@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Validate, build and clean consumer
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Generated lexicons match authoring, one Location union
+        run: node scripts/generate.mjs --check
+      - name: Lexicons evolve compatibly from the last release
+        run: node scripts/check-evolution.mjs
+      - name: Lexicon documents and vendored pins
+        run: node scripts/check-lexicons.mjs
+      - name: Build generated TypeScript and library
+        run: npm run build
+      - name: Fixtures, named places and lexicon tests
+        run: node --test "dist/test/**/*.test.js"
+      - name: Clean consumer from the pinned lexicons
+        run: npm run verify-consumer
