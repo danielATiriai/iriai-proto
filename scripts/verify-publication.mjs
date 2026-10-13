@@ -3,13 +3,14 @@
 // Each published lexicon must resolve to our publisher, match the file in this
 // release exactly, and carry the CID the publish step recorded. Then writes the
 // release manifest (commit, records, pins, tool versions, approver).
+import { fileURLToPath } from 'node:url'
 import { readFile, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { LexResolver } from '@atproto/lex-resolver'
 import { lexEquals } from '@atproto/lex-data'
 import { NSID } from '@atproto/syntax'
 
-const root = new URL('..', import.meta.url).pathname
+const root = fileURLToPath(new URL('..', import.meta.url))
 const read = async (p) => JSON.parse(await readFile(join(root, p), 'utf8'))
 const config = await read('iriai-proto.config.json')
 const pkg = await read('package.json')
@@ -17,6 +18,14 @@ const lock = await read('package-lock.json')
 const publication = await read('release/publication.json')
 const bundle = await read('release/bundle.json')
 const pins = await read('lexicons.json')
+
+// The approver of the protected release environment, read by the workflow from
+// the run's approvals API (GITHUB_ACTOR is only whoever pushed the tag).
+const approvedBy = JSON.parse(process.env.RELEASE_APPROVED_BY || '[]')
+if (process.env.GITHUB_ACTIONS && approvedBy.length === 0) {
+  console.error('✗ no approval recorded for the release environment; add a required reviewer to "release"')
+  process.exit(1)
+}
 
 const resolver = new LexResolver({})
 const failures = []
@@ -61,6 +70,7 @@ const manifest = {
   },
   approval: {
     environment: 'release',
+    approvedBy,
     triggeredBy: process.env.GITHUB_ACTOR ?? null,
     run: process.env.GITHUB_RUN_ID
       ? `${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}`

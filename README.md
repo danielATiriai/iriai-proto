@@ -38,7 +38,7 @@ A PlaceProto event is a `community.lexicon.calendar.event` record plus an `app.i
 ```bash
 npm ci
 npm run generate         # regenerate lexicons/app/... from authoring/
-npm run validate         # generated == committed, one Location union, lexicon docs, build, tests
+npm run validate         # generated == committed, one Location union, compatible with the last release, lexicon docs, build, tests
 npm run build            # lex build (generated TypeScript) + tsc
 npm run verify-consumer  # clean consumer: npm ci + lex build from the pinned lexicons, no lex install
 ```
@@ -47,8 +47,15 @@ Tool versions are exact pins in `package.json` and `package-lock.json`. `lex ins
 
 ## Releasing
 
+One-time setup, before the first tag is pushed (GitHub creates a missing environment with no protection):
+
+- An environment named `release` with Daniel as required reviewer and the secret `PUBLISHER_APP_PASSWORD`.
+- A tag ruleset for `v*` that restricts creation, update and deletion, so an approved tag cannot be moved.
+
+Then for each release:
+
 1. Every place in `places/japantown.json` has `coordinatesVerified: true`, and `CHANGELOG.md` has a section for the version in `package.json`.
 2. Push tag `v<version>`. The **Release** workflow checks the tagged commit, then waits for approval of the `release` environment.
-3. After approval it publishes our lexicons as `com.atproto.lexicon.schema` records from publisher.iriai.app, resolves them back through `_lexicon.proto.iriai.app`, writes `release-manifest.json` (commit, record URIs and CIDs, pins, tool versions) and creates the GitHub release with the checksummed bundle.
+3. After approval it publishes our lexicons as `com.atproto.lexicon.schema` records from publisher.iriai.app, resolves them back through `_lexicon.proto.iriai.app`, writes `release-manifest.json` (commit, record URIs and CIDs, pins, tool versions, who approved) and creates the GitHub release with the checksummed bundle.
 
 The publisher app password is only in the `release` environment secret `PUBLISHER_APP_PASSWORD`.

@@ -11,5 +11,6 @@
       "name": "Japantown Peace Plaza"
     }
   },
-  "expect": "invalid"
+  "expect": "invalid",
+  "expectIssue": "must have the property \"eventUri\""
 }

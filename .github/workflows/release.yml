@@ -18,6 +18,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -25,6 +27,8 @@ jobs:
       - run: npm ci
       - name: Generated lexicons match authoring
         run: node scripts/generate.mjs --check
+      - name: Lexicons evolve compatibly from the previous release
+        run: node scripts/check-evolution.mjs
       - name: Every vendored lexicon pinned and matching
         run: node scripts/check-lexicons.mjs --require-pins
       - name: Vendored lexicons still match the network
@@ -44,6 +48,7 @@ jobs:
     environment: release
     permissions:
       contents: write
+      actions: read
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -58,6 +63,13 @@ jobs:
         env:
           PUBLISHER_APP_PASSWORD: ${{ secrets.PUBLISHER_APP_PASSWORD }}
         run: npm run release:publish
+      - name: Read who approved the release environment
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          approvers=$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/approvals" \
+            --jq '[.[] | select(.state == "approved") | .user.login]')
+          echo "RELEASE_APPROVED_BY=$approvers" >> "$GITHUB_ENV"
       - name: Verify publication through DNS authority and write the release manifest
         run: npm run release:verify
       - name: Create the GitHub release

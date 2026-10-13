@@ -1,12 +1,13 @@
 // Checks every lexicon in lexicons/ is a valid Lexicon document, that the
 // vendored community lexicons are pinned in lexicons.json with a publisher
 // URI and CID, and that every pinned CID matches the file on disk.
+import { fileURLToPath } from 'node:url'
 import { readFile, readdir } from 'node:fs/promises'
 import { join, relative } from 'node:path'
 import { lexiconDocumentSchema } from '@atproto/lex-document'
 import { cidForLex } from '@atproto/lex-cbor'
 
-const root = new URL('..', import.meta.url).pathname
+const root = fileURLToPath(new URL('..', import.meta.url))
 const config = JSON.parse(await readFile(join(root, 'iriai-proto.config.json'), 'utf8'))
 const manifest = JSON.parse(await readFile(join(root, 'lexicons.json'), 'utf8'))
 const strict = process.argv.includes('--require-pins')

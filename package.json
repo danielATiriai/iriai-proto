@@ -12,7 +12,7 @@
   "scripts": {
     "generate": "node scripts/generate.mjs",
     "build": "lex build --lexicons lexicons --out src/lexicons --clear --index-file && tsc -p tsconfig.json",
-    "validate": "node scripts/generate.mjs --check && node scripts/check-lexicons.mjs && npm run build && node --test \"dist/test/**/*.test.js\"",
+    "validate": "node scripts/generate.mjs --check && node scripts/check-evolution.mjs && node scripts/check-lexicons.mjs && npm run build && node --test \"dist/test/**/*.test.js\"",
     "verify-consumer": "bash scripts/verify-consumer.sh",
     "sync-lexicons": "lex install --update",
     "release:bundle": "node scripts/bundle.mjs",

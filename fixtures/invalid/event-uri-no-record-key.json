@@ -12,5 +12,6 @@
       "name": "Japantown Peace Plaza"
     }
   },
-  "expect": "invalid"
+  "expect": "invalid",
+  "expectIssue": "valid record key"
 }

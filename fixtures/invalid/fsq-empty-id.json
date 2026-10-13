@@ -10,5 +10,6 @@
       "fsq_place_id": "   "
     }
   },
-  "expect": "invalid"
+  "expect": "invalid",
+  "expectIssue": "fsq_place_id must not be empty"
 }

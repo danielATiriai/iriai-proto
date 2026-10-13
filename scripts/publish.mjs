@@ -2,10 +2,11 @@
 // (rkey = NSID) from the publisher account. Needs PUBLISHER_APP_PASSWORD, the
 // iriai-proto-release app password, which only the release job receives.
 // Vendored community lexicons are never republished under our account.
+import { fileURLToPath } from 'node:url'
 import { readFile, readdir, writeFile, mkdir } from 'node:fs/promises'
 import { join } from 'node:path'
 
-const root = new URL('..', import.meta.url).pathname
+const root = fileURLToPath(new URL('..', import.meta.url))
 const config = JSON.parse(await readFile(join(root, 'iriai-proto.config.json'), 'utf8'))
 const password = process.env.PUBLISHER_APP_PASSWORD
 const entryway = process.env.PUBLISHER_SERVICE ?? 'https://bsky.social'

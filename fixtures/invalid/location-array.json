@@ -14,5 +14,6 @@
       }
     ]
   },
-  "expect": "invalid"
+  "expect": "invalid",
+  "expectIssue": "location must be an object"
 }

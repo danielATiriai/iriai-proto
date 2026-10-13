@@ -8,11 +8,12 @@
 // With --check it writes nothing and fails if the committed lexicons differ
 // from what would be generated, or if any Location union in them differs from
 // the authoring definition.
+import { fileURLToPath } from 'node:url'
 import { readFile, writeFile, mkdir, readdir } from 'node:fs/promises'
 import { dirname, join } from 'node:path'
 import { isDeepStrictEqual } from 'node:util'
 
-const root = new URL('..', import.meta.url).pathname
+const root = fileURLToPath(new URL('..', import.meta.url))
 const check = process.argv.includes('--check')
 
 const config = JSON.parse(await readFile(join(root, 'iriai-proto.config.json'), 'utf8'))

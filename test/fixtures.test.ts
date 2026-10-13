@@ -10,6 +10,8 @@ interface Fixture {
   repo: string
   record: unknown
   expect: 'valid' | 'invalid'
+  /** For invalid fixtures: a substring of the issue the fixture must be rejected for. */
+  expectIssue?: string
   resolution?: Record<string, unknown>
   roundTrip?: boolean
 }
@@ -60,7 +62,14 @@ describe('invalid sidecar fixtures', () => {
       assert.equal(fixture.expect, 'invalid')
       const result = validateEventSidecar(fixture.record, { repo: fixture.repo })
       assert.equal(result.ok, false, `expected InvalidRequest for ${name}`)
-      if (!result.ok) assert.equal(result.error, 'InvalidRequest')
+      if (result.ok) return
+      assert.equal(result.error, 'InvalidRequest')
+      // Rejected for its own reason, not for an unrelated error.
+      assert.ok(fixture.expectIssue, `${name} must name its expectIssue`)
+      assert.ok(
+        result.issues.some((issue) => issue.includes(fixture.expectIssue!)),
+        `${name}: expected an issue containing "${fixture.expectIssue}", got ${JSON.stringify(result.issues)}`,
+      )
     })
   }
 })

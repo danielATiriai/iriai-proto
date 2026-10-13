@@ -2,12 +2,13 @@
 // JSON, the dependency CID manifest, generated TypeScript, fixtures, the
 // named-place list, configuration and changelog. Refuses to bundle a release
 // that is not fully pinned or that ships unverified place coordinates.
+import { fileURLToPath } from 'node:url'
 import { createHash } from 'node:crypto'
 import { execFileSync } from 'node:child_process'
 import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 
-const root = new URL('..', import.meta.url).pathname
+const root = fileURLToPath(new URL('..', import.meta.url))
 const pkg = JSON.parse(await readFile(join(root, 'package.json'), 'utf8'))
 const places = JSON.parse(await readFile(join(root, 'places/japantown.json'), 'utf8'))
 const tag = `v${pkg.version}`

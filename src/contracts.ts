@@ -1,9 +1,10 @@
 import { readFileSync, readdirSync } from 'node:fs'
 import { join } from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { Lexicons, type LexiconDoc } from '@atproto/lexicon'
 
 /** Package root: dist/src/contracts.js lives two levels below it. */
-export const packageRoot = new URL('../../', import.meta.url).pathname
+export const packageRoot = fileURLToPath(new URL('../../', import.meta.url))
 
 export interface ProtoConfig {
   namespace: string
