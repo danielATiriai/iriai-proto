@@ -6,7 +6,7 @@ name: Publish seed events
 # The check job builds and validates the records with no credentials; the
 # publish job waits for approval of the protected "steward" environment, which
 # alone holds the steward app password. A seed already published is reported,
-# not written again.
+# not written again; a seed with recorded record keys is corrected in place.
 
 on:
   workflow_dispatch:

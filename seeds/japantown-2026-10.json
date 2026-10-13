@@ -1,5 +1,5 @@
 {
-  "description": "Japantown seed events published by the steward account (events.iriai.app, D-26). Each seed is a real, sourced event approved by Daniel on 2026-10-12 (BUILD-006); times are local San Francisco time with their UTC offset. Records reference the named-place list for their location.",
+  "description": "Japantown seed events published by the steward account (events.iriai.app, D-26). Each seed is a real, sourced event approved by Daniel on 2026-10-12, with dates, times and addresses confirmed by him (BUILD-006); times are local San Francisco time with their UTC offset. Records reference the named-place list for their location. A published seed records its record keys under \"published\", and a later edit to it updates both records in place.",
   "approved": "Daniel, 2026-10-12",
   "seeds": [
     {
@@ -10,7 +10,91 @@
       "endsAt": "2026-10-15T20:30:00-07:00",
       "place": "jcccnc",
       "source": "https://www.jcccnc.org/events/kabuki-theatre-appreciation-class-with-jetaanc/",
+      "sourceName": "JCCCNC event page",
+      "published": {
+        "eventRkey": "3mxrq3w4c2k2y",
+        "sidecarRkey": "3mxrq3w4c2l2y"
+      }
+    },
+    {
+      "id": "anime-cinema-club-perfect-blue-2026-10-15",
+      "name": "Anime Cinema Club: \"Perfect Blue\" Remastered",
+      "description": "Anime Cinema Club screening of Satoshi Kon's \"Perfect Blue\" (remastered) at New People Cinema. Doors open at 6pm, screening at 6:30pm. Tickets $10, $15 VIP.",
+      "startsAt": "2026-10-15T18:30:00-07:00",
+      "place": "new-people-cinema",
+      "source": "https://sf.funcheap.com/2026-anime-cinema-club-perfect-blue-remastered-sfs-japantown/",
+      "sourceName": "SF Funcheap listing"
+    },
+    {
+      "id": "kendo-sf-kendo-dojo-2026-10-15",
+      "name": "Kendo with San Francisco Kendo Dojo",
+      "description": "Kendo practice with San Francisco Kendo Dojo at the Japanese Cultural and Community Center of Northern California.",
+      "startsAt": "2026-10-15T18:00:00-07:00",
+      "endsAt": "2026-10-15T22:00:00-07:00",
+      "place": "jcccnc",
+      "source": "https://www.jcccnc.org/events/kendo-with-sf-kendo-dojo/",
       "sourceName": "JCCCNC event page"
+    },
+    {
+      "id": "yosakoi-intro-workshop-2026-10-16",
+      "name": "Introduction to Yosakoi Dance Workshop with Ito Yosakoi",
+      "description": "Introductory yosakoi dance workshop with Ito Yosakoi at the Japanese Cultural and Community Center of Northern California, also offered online.",
+      "startsAt": "2026-10-16T19:00:00-07:00",
+      "endsAt": "2026-10-16T21:00:00-07:00",
+      "place": "jcccnc",
+      "mode": "hybrid",
+      "source": "https://www.jcccnc.org/events/intro-to-yosakoi-dance-2025-997-830/",
+      "sourceName": "JCCCNC event page"
+    },
+    {
+      "id": "udon-making-workshop-2026-10-17",
+      "name": "Udon Making Workshop",
+      "description": "Hands-on udon making workshop at the Japanese Cultural and Community Center of Northern California.",
+      "startsAt": "2026-10-17T10:00:00-07:00",
+      "endsAt": "2026-10-17T13:00:00-07:00",
+      "place": "jcccnc",
+      "source": "https://www.jcccnc.org/events/udon-making-workshop-2/",
+      "sourceName": "JCCCNC event page"
+    },
+    {
+      "id": "curry-cook-off-2026-10-24",
+      "name": "20th Annual Curry Cook-Off",
+      "description": "The Japanese American Religious Federation's 20th annual curry cook-off, benefiting Kinmon Gakuen, at Christ United Presbyterian Church (Sutter St at Laguna). Tickets $17 presale, $20 at the door, $8 for kids, free under 4.",
+      "startsAt": "2026-10-24T16:00:00-07:00",
+      "endsAt": "2026-10-24T18:00:00-07:00",
+      "place": "christ-united-presbyterian",
+      "source": "https://www.instagram.com/p/DeI3B-STZ9u/",
+      "sourceName": "JARF Instagram post"
+    },
+    {
+      "id": "family-treasures-kimono-sale-2026-10-24",
+      "name": "Family Treasures Marketplace, Kimono Sale and BWA Boutique (Saturday)",
+      "description": "Family treasures marketplace, kimono sale and Buddhist Women's Association boutique in the BCSF Gymnasium at the Buddhist Church of San Francisco, day 1 of 2. Also open Sunday Oct 25, 11am to 4pm.",
+      "startsAt": "2026-10-24T11:00:00-07:00",
+      "endsAt": "2026-10-24T16:00:00-07:00",
+      "place": "buddhist-church-of-sf",
+      "source": "https://www.instagram.com/p/DeI74jBTmyt/",
+      "sourceName": "Buddhist Church of San Francisco Instagram post"
+    },
+    {
+      "id": "family-treasures-kimono-sale-2026-10-25",
+      "name": "Family Treasures Marketplace, Kimono Sale and BWA Boutique (Sunday)",
+      "description": "Family treasures marketplace, kimono sale and Buddhist Women's Association boutique in the BCSF Gymnasium at the Buddhist Church of San Francisco, day 2 of 2. Also open Saturday Oct 24, 11am to 4pm.",
+      "startsAt": "2026-10-25T11:00:00-07:00",
+      "endsAt": "2026-10-25T16:00:00-07:00",
+      "place": "buddhist-church-of-sf",
+      "source": "https://www.instagram.com/p/DeI74jBTmyt/",
+      "sourceName": "Buddhist Church of San Francisco Instagram post"
+    },
+    {
+      "id": "jcccnc-halloween-carnival-2026-10-30",
+      "name": "Halloween Indoor Carnival at JCCCNC",
+      "description": "Indoor Halloween carnival at the Japanese Cultural and Community Center of Northern California.",
+      "startsAt": "2026-10-30T18:00:00-07:00",
+      "endsAt": "2026-10-30T20:00:00-07:00",
+      "place": "jcccnc",
+      "source": "https://www.jcccnc.org/calendar-of-events/",
+      "sourceName": "JCCCNC calendar of events"
     }
   ]
 }

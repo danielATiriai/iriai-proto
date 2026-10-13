@@ -17,6 +17,14 @@ export interface Seed {
   place: string
   source: string
   sourceName?: string
+  /** Attendance mode; in person unless given. */
+  mode?: 'inperson' | 'hybrid' | 'virtual'
+  /**
+   * Record keys of the published pair, recorded once a seed is live. A seed
+   * with recorded keys is corrected in place (both records updated in one
+   * batch), never published a second time.
+   */
+  published?: { eventRkey: string; sidecarRkey: string }
 }
 
 export interface SeedList {
@@ -63,8 +71,8 @@ export function buildSeedRecords(
   if (endsAt && endsAt <= startsAt) throw new Error(`${seed.id}: endsAt must be after startsAt`)
 
   const collection = config.communityEventCollection
-  const eventRkey = opts.eventRkey ?? TID.nextStr()
-  const sidecarRkey = opts.sidecarRkey ?? TID.nextStr(eventRkey)
+  const eventRkey = opts.eventRkey ?? seed.published?.eventRkey ?? TID.nextStr()
+  const sidecarRkey = opts.sidecarRkey ?? seed.published?.sidecarRkey ?? TID.nextStr(eventRkey)
   const eventUri = `at://${opts.repo}/${collection}/${eventRkey}`
 
   const event = {
@@ -74,7 +82,7 @@ export function buildSeedRecords(
     createdAt: opts.createdAt,
     startsAt,
     ...(endsAt ? { endsAt } : {}),
-    mode: `${collection}#inperson`,
+    mode: `${collection}#${seed.mode ?? 'inperson'}`,
     status: `${collection}#scheduled`,
     locations: [structuredClone(place.address), ...compatibilityLocations(place.location)],
     uris: [{ uri: seed.source, ...(seed.sourceName ? { name: seed.sourceName } : {}) }],

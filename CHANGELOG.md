@@ -3,6 +3,7 @@
 ## Unreleased
 
 - Seed events: `seeds/japantown-2026-10.json`, `buildSeedRecords()` and the **Publish seed events** workflow, which writes each seed's community event and sidecar from events.iriai.app in one `applyWrites` batch (BUILD-002, BUILD-006). No lexicon changes.
+- Seed corrections update in place: a seed with recorded record keys (`published`) is rebuilt with the same keys and `createdAt` and updated in one `swapCommit` batch, never created again. Seeds may set an attendance `mode`. The other seven approved Japantown seeds (Oct 15 to 30) are in the list, with the two-day kimono sale as one event per day (BUILD-006).
 
 ## 0.1.0
 
