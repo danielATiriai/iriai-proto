@@ -17,7 +17,7 @@ import { buildSeedRecords, config, eventSidecarNsid, findSeed } from '../dist/sr
 
 const root = fileURLToPath(new URL('..', import.meta.url))
 const { values } = parseArgs({ options: { seeds: { type: 'string' }, 'dry-run': { type: 'boolean', default: false } } })
-const ids = (values.seeds ?? '').split(',').map((s) => s.trim()).filter(Boolean)
+const ids = [...new Set((values.seeds ?? '').split(',').map((s) => s.trim()).filter(Boolean))]
 if (ids.length === 0) fail('pass --seeds with one or more seed ids')
 const seeds = ids.map((id) => findSeed(id) ?? fail(`unknown seed ${id}`))
 const steward = config.steward

@@ -17,6 +17,7 @@ export {
   buildSeedRecords,
   findSeed,
   japantownSeeds,
+  seedLabel,
   type Seed,
   type SeedList,
   type SeedRecords,

@@ -70,7 +70,7 @@ export function buildSeedRecords(
   const event = {
     $type: collection,
     name: seed.name,
-    description: seed.description,
+    description: `${seed.description}\n\n${seedLabel(seed)}`,
     createdAt: opts.createdAt,
     startsAt,
     ...(endsAt ? { endsAt } : {}),
@@ -88,6 +88,11 @@ export function buildSeedRecords(
   if (!result.ok) throw new Error(`${seed.id}: invalid sidecar: ${result.issues.join('; ')}`)
 
   return { eventRkey, sidecarRkey, eventUri, event, sidecar: result.value }
+}
+
+/** PlaceProto section 9 (decision 6c): seed listings say they were listed by Iriai. */
+export function seedLabel(seed: Seed): string {
+  return `Listed by Iriai. Source: ${seed.sourceName ?? seed.source}.`
 }
 
 function toUtc(value: string, label: string): string {

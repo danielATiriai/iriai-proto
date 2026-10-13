@@ -1,7 +1,7 @@
 import { describe, it } from 'node:test'
 import assert from 'node:assert/strict'
 import { isValidTid } from '@atproto/syntax'
-import { buildSeedRecords, config, japantownSeeds, namedPlaces } from '../src/index.js'
+import { buildSeedRecords, config, japantownSeeds, namedPlaces, seedLabel } from '../src/index.js'
 
 const repo = config.steward.did
 const createdAt = '2026-10-13T12:00:00.000Z'
@@ -23,6 +23,8 @@ describe('seed events', () => {
       assert.notEqual(pair.eventRkey, pair.sidecarRkey)
       assert.equal(pair.sidecar.eventUri, `at://${repo}/${config.communityEventCollection}/${pair.eventRkey}`)
       assert.match(pair.event.startsAt as string, /Z$/)
+      assert.equal(pair.event.description, `${seed.description}\n\n${seedLabel(seed)}`)
+      assert.match(pair.event.description as string, /Listed by Iriai\. Source: .+\.$/)
       assert.deepEqual(pair.event.locations, [
         (namedPlaces.places.find((p) => p.id === seed.place) ?? assert.fail()).address,
         pair.sidecar.location,
