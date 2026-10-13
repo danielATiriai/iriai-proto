@@ -14,6 +14,7 @@
     "build": "lex build --lexicons lexicons --out src/lexicons --clear --index-file && tsc -p tsconfig.json",
     "validate": "node scripts/generate.mjs --check && node scripts/check-evolution.mjs && node scripts/check-lexicons.mjs && npm run build && node --test \"dist/test/**/*.test.js\"",
     "verify-consumer": "bash scripts/verify-consumer.sh",
+    "verify-try-it": "bash scripts/verify-try-it.sh",
     "sync-lexicons": "lex install --update",
     "release:bundle": "node scripts/bundle.mjs",
     "release:publish": "node scripts/publish.mjs",

@@ -1,0 +1,38 @@
+name: Try-it example
+
+# Runs examples/try-it from a clean copy against the pinned v0.1.0 release and
+# the live query API (https://query.iriai.app), on every change to the example
+# and once a day, so the example the catalog links to is known to work.
+
+on:
+  pull_request:
+    paths:
+      - examples/try-it/**
+      - scripts/verify-try-it.sh
+      - .github/workflows/try-it.yml
+  push:
+    branches: [main]
+  schedule:
+    - cron: '17 13 * * *'
+  workflow_dispatch:
+    inputs:
+      query_url:
+        description: Query API base URL
+        default: https://query.iriai.app
+
+permissions:
+  contents: read
+
+jobs:
+  try-it:
+    name: Twenty-line example against the live query
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Clean copy, pinned release, live query
+        env:
+          QUERY_URL: ${{ inputs.query_url || 'https://query.iriai.app' }}
+        run: npm run verify-try-it
