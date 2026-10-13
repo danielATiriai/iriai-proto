@@ -57,19 +57,25 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build
-      - name: Bundle
-        run: npm run release:bundle
-      - name: Publish schema records from publisher.iriai.app
-        env:
-          PUBLISHER_APP_PASSWORD: ${{ secrets.PUBLISHER_APP_PASSWORD }}
-        run: npm run release:publish
+      # Before anything is published: a release environment without a
+      # required reviewer has no approvals, and the release stops here.
       - name: Read who approved the release environment
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           approvers=$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/approvals" \
             --jq '[.[] | select(.state == "approved") | .user.login]')
+          if [ "$approvers" = "[]" ]; then
+            echo "::error::No approval recorded for the release environment; add a required reviewer to \"release\"."
+            exit 1
+          fi
           echo "RELEASE_APPROVED_BY=$approvers" >> "$GITHUB_ENV"
+      - name: Bundle
+        run: npm run release:bundle
+      - name: Publish schema records from publisher.iriai.app
+        env:
+          PUBLISHER_APP_PASSWORD: ${{ secrets.PUBLISHER_APP_PASSWORD }}
+        run: npm run release:publish
       - name: Verify publication through DNS authority and write the release manifest
         run: npm run release:verify
       - name: Create the GitHub release
