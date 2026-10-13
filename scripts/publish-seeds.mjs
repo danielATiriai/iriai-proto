@@ -1,9 +1,16 @@
 // Publishes approved seed events from the steward account (events.iriai.app).
 // Each seed is one community.lexicon.calendar.event plus its PlaceProto
 // sidecar, committed together in one com.atproto.repo.applyWrites batch so
-// neither exists without the other. A seed already in the steward's
-// repository (same source URL and start time) is reported, not written again,
-// so a re-run after an unclear failure never duplicates an event.
+// neither exists without the other.
+//
+// A seed whose record keys are recorded in the seed list ("published") is
+// corrected in place: the pair is rebuilt with the same keys and createdAt,
+// and any record that differs is updated in one batch guarded by swapCommit.
+// It is never created a second time. A seed without recorded keys that is
+// already in the steward's repository (same source URL and start time) is
+// reported, not written again. An unrecorded event that shares a seed's
+// source URL but not its start time stops the run, because that is what an
+// edited but unrecorded seed looks like; record its keys first.
 //
 //   node scripts/publish-seeds.mjs --seeds <id,id> [--dry-run]
 //
@@ -13,7 +20,7 @@ import { fileURLToPath } from 'node:url'
 import { appendFile, mkdir, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { parseArgs } from 'node:util'
-import { buildSeedRecords, config, eventSidecarNsid, findSeed } from '../dist/src/index.js'
+import { buildSeedRecords, config, eventSidecarNsid, findSeed, japantownSeeds } from '../dist/src/index.js'
 
 const root = fileURLToPath(new URL('..', import.meta.url))
 const { values } = parseArgs({ options: { seeds: { type: 'string' }, 'dry-run': { type: 'boolean', default: false } } })
@@ -45,16 +52,30 @@ const existingEvents = await listAll(collection)
 const existingSidecars = await listAll(eventSidecarNsid)
 const results = []
 
+const recordedEventRkeys = new Set(japantownSeeds.seeds.flatMap((s) => (s.published ? [s.published.eventRkey] : [])))
+
 for (const seed of seeds) {
+  if (seed.published) {
+    results.push(await correct(seed))
+    continue
+  }
+
   const startsAt = new Date(seed.startsAt).toISOString()
-  const found = existingEvents.find(
-    (r) => r.value.startsAt === startsAt && (r.value.uris ?? []).some((u) => u.uri === seed.source),
-  )
+  const sameSource = existingEvents.filter((r) => (r.value.uris ?? []).some((u) => u.uri === seed.source))
+  const found = sameSource.find((r) => r.value.startsAt === startsAt)
   if (found) {
     const sidecar = existingSidecars.find((r) => r.value.eventUri === found.uri)
     console.log(`• ${seed.id} already published: ${found.uri}${sidecar ? '' : ' (no sidecar found)'}`)
+    console.log(`  record its keys in the seed list: eventRkey ${rkeyOf(found.uri)}${sidecar ? `, sidecarRkey ${rkeyOf(sidecar.uri)}` : ''}`)
     results.push({ seed: seed.id, status: 'existing', event: pick(found), sidecar: sidecar ? pick(sidecar) : null })
     continue
+  }
+  const unrecorded = sameSource.filter((r) => !recordedEventRkeys.has(rkeyOf(r.uri)))
+  if (unrecorded.length) {
+    fail(
+      `${seed.id}: the steward already has an event from this source at another time (${unrecorded.map((r) => r.uri).join(', ')}). ` +
+        'If it is this seed, record its keys under "published" so the run corrects it in place.',
+    )
   }
 
   const pair = buildSeedRecords(seed, { repo: steward.did, createdAt: new Date().toISOString() })
@@ -71,14 +92,9 @@ for (const seed of seeds) {
     auth,
   )
   const [eventWrite, sidecarWrite] = commit.results ?? []
-
-  // Read both back from the PDS and check they are the records just committed.
-  const event = await getRecord(collection, pair.eventRkey)
-  const sidecar = await getRecord(eventSidecarNsid, pair.sidecarRkey)
-  if (eventWrite?.cid && event.cid !== eventWrite.cid) fail(`${seed.id}: event read back with a different CID`)
-  if (sidecarWrite?.cid && sidecar.cid !== sidecarWrite.cid) fail(`${seed.id}: sidecar read back with a different CID`)
-  if (sidecar.value.eventUri !== event.uri) fail(`${seed.id}: sidecar eventUri does not match the event`)
+  const { event, sidecar } = await readBack(seed, pair, eventWrite?.cid, sidecarWrite?.cid)
   console.log(`✓ ${seed.id} published: ${event.uri}`)
+  console.log(`  record its keys in the seed list: eventRkey ${pair.eventRkey}, sidecarRkey ${pair.sidecarRkey}`)
   results.push({ seed: seed.id, status: 'published', commit: commit.commit, event: pick(event), sidecar: pick(sidecar) })
 }
 
@@ -100,13 +116,82 @@ if (process.env.GITHUB_STEP_SUMMARY) {
 const orphaned = results.filter((r) => !r.sidecar)
 if (orphaned.length) fail(`event without a sidecar: ${orphaned.map((r) => r.event.uri).join(', ')}`)
 
+// Rebuilds a published seed with its recorded keys and original createdAt and
+// updates whichever records differ, in one batch that fails if the repository
+// moved since it was read (swapCommit).
+async function correct(seed) {
+  const { eventRkey, sidecarRkey } = seed.published
+  const current = {
+    event: await getRecord(collection, eventRkey, { allowMissing: true }),
+    sidecar: await getRecord(eventSidecarNsid, sidecarRkey, { allowMissing: true }),
+  }
+  if (!current.event || !current.sidecar) {
+    fail(`${seed.id}: recorded ${!current.event ? 'event' : 'sidecar'} is missing from the steward's repository; not recreating it`)
+  }
+  const pair = buildSeedRecords(seed, { repo: steward.did, createdAt: current.event.value.createdAt })
+  const writes = []
+  if (!sameRecord(current.event.value, pair.event)) {
+    writes.push({ $type: 'com.atproto.repo.applyWrites#update', collection, rkey: eventRkey, value: pair.event })
+  }
+  if (!sameRecord(current.sidecar.value, pair.sidecar)) {
+    writes.push({ $type: 'com.atproto.repo.applyWrites#update', collection: eventSidecarNsid, rkey: sidecarRkey, value: pair.sidecar })
+  }
+  if (writes.length === 0) {
+    console.log(`• ${seed.id} is published and unchanged: ${current.event.uri}`)
+    return { seed: seed.id, status: 'unchanged', event: pick(current.event), sidecar: pick(current.sidecar) }
+  }
+
+  const head = await xrpcGet(pds, 'com.atproto.sync.getLatestCommit', new URLSearchParams({ did: steward.did }))
+  const commit = await xrpc(pds, 'com.atproto.repo.applyWrites', { repo: steward.did, swapCommit: head.cid, writes }, auth)
+  const cids = Object.fromEntries(writes.map((w, i) => [w.collection, commit.results?.[i]?.cid]))
+  const { event, sidecar } = await readBack(seed, pair, cids[collection], cids[eventSidecarNsid])
+  for (const [name, after] of [['event', pair.event], ['sidecar', pair.sidecar]]) {
+    const read = name === 'event' ? event : sidecar
+    if (!sameRecord(read.value, after)) fail(`${seed.id}: ${name} read back does not match the correction`)
+  }
+  const changed = writes.map((w) => (w.collection === collection ? 'event' : 'sidecar')).join(' and ')
+  console.log(`✓ ${seed.id} corrected in place (${changed}): ${event.uri}`)
+  return { seed: seed.id, status: 'corrected', commit: commit.commit, event: pick(event), sidecar: pick(sidecar) }
+}
+
+// Reads both records back from the PDS and checks they are the ones committed.
+async function readBack(seed, pair, eventCid, sidecarCid) {
+  const event = await getRecord(collection, pair.eventRkey)
+  const sidecar = await getRecord(eventSidecarNsid, pair.sidecarRkey)
+  if (eventCid && event.cid !== eventCid) fail(`${seed.id}: event read back with a different CID`)
+  if (sidecarCid && sidecar.cid !== sidecarCid) fail(`${seed.id}: sidecar read back with a different CID`)
+  if (sidecar.value.eventUri !== event.uri) fail(`${seed.id}: sidecar eventUri does not match the event`)
+  return { event, sidecar }
+}
+
+function sameRecord(a, b) {
+  return canonical(a) === canonical(b)
+}
+
+function canonical(value) {
+  if (Array.isArray(value)) return `[${value.map(canonical).join(',')}]`
+  if (value && typeof value === 'object') {
+    return `{${Object.keys(value).sort().map((k) => `${JSON.stringify(k)}:${canonical(value[k])}`).join(',')}}`
+  }
+  return JSON.stringify(value)
+}
+
+function rkeyOf(uri) {
+  return uri.split('/').pop()
+}
+
 function pick(record) {
   return { uri: record.uri, cid: record.cid, value: record.value }
 }
 
-async function getRecord(coll, rkey) {
+async function getRecord(coll, rkey, { allowMissing = false } = {}) {
   const params = new URLSearchParams({ repo: steward.did, collection: coll, rkey })
-  return xrpcGet(pds, 'com.atproto.repo.getRecord', params)
+  try {
+    return await xrpcGet(pds, 'com.atproto.repo.getRecord', params)
+  } catch (err) {
+    if (allowMissing && err.error === 'RecordNotFound') return null
+    throw err
+  }
 }
 
 async function listAll(coll) {
@@ -125,7 +210,9 @@ async function listAll(coll) {
 async function xrpcGet(service, method, params) {
   const res = await fetch(`${service}/xrpc/${method}?${params}`)
   const json = await res.json().catch(() => ({}))
-  if (!res.ok) throw new Error(`${method} failed (${res.status}): ${json.error ?? ''} ${json.message ?? ''}`)
+  if (!res.ok) {
+    throw Object.assign(new Error(`${method} failed (${res.status}): ${json.error ?? ''} ${json.message ?? ''}`), { error: json.error })
+  }
   return json
 }
 
