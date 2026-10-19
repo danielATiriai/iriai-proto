@@ -45,6 +45,10 @@ npm run verify-consumer  # clean consumer: npm ci + lex build from the pinned le
 
 Tool versions are exact pins in `package.json` and `package-lock.json`. `lex install` runs only in the **Sync lexicons** workflow, which resolves the vendored schemas from the network and commits their pins.
 
+## Try it
+
+[`examples/try-it`](examples/try-it) is a twenty-line program that builds the contracts from the pinned v0.1.0 release (bundle SHA-256 checked) and queries the live index at `https://query.iriai.app` for events near Japantown Peace Plaza, validating each result. `npm run verify-try-it` runs it from a clean copy, as the daily **Try-it example** workflow does.
+
 ## Releasing
 
 One-time setup, before the first tag is pushed (GitHub creates a missing environment with no protection):
