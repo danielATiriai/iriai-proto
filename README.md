@@ -49,6 +49,10 @@ Tool versions are exact pins in `package.json` and `package-lock.json`. `lex ins
 
 [`examples/try-it`](examples/try-it) is a twenty-line program that builds the contracts from the pinned v0.1.0 release (bundle SHA-256 checked) and queries the live index at `https://query.iriai.app` for events near Japantown Peace Plaza, validating each result. `npm run verify-try-it` runs it from a clean copy, as the daily **Try-it example** workflow does.
 
+## Follow changes
+
+There is no Iriai-hosted stream in YC. To follow PlaceProto events as they are written, read Bluesky's public Jetstream filtered to `community.lexicon.calendar.event` and `app.iriai.proto.event`. The [stream recipe](https://github.com/danielATiriai/iriai-proto-index/blob/main/docs/stream-recipe.md) in iriai-proto-index explains resuming from a cursor and pairing each sidecar with its event, and the planned [Iriai change feed](https://github.com/danielATiriai/iriai-proto-index/blob/main/docs/change-feed.md) is labelled coming soon.
+
 ## Releasing
 
 One-time setup, before the first tag is pushed (GitHub creates a missing environment with no protection):
