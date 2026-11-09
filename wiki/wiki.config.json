@@ -1,0 +1,7 @@
+{
+  "product": "proto",
+  "name": "PlaceProto record contracts",
+  "services": [],
+  "contracts": ["lexicons/app/iriai/proto"],
+  "note": "Released as pinned git tags; nothing is deployed. Pages for this repository are kept in the private wiki repository, so only this file lives here."
+}
